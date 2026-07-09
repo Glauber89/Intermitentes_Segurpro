@@ -12,13 +12,13 @@
 // ============================================
 
 const firebaseConfig = {
-    apiKey: "COLE_SUA_API_KEY_AQUI",
-    authDomain: "COLE_SEU_AUTH_DOMAIN_AQUI",
-    databaseURL: "COLE_SUA_DATABASE_URL_AQUI",
-    projectId: "COLE_SEU_PROJECT_ID_AQUI",
-    storageBucket: "COLE_SEU_STORAGE_BUCKET_AQUI",
-    messagingSenderId: "COLE_SEU_SENDER_ID_AQUI",
-    appId: "COLE_SEU_APP_ID_AQUI"
+    apiKey: "AIzaSyAc6GoCwpL8B_IWyl7q4lq0wdisCTU2yxM",
+    authDomain: "intermitentes-segurpro.firebaseapp.com",
+    databaseURL: "https://intermitentes-segurpro-default-rtdb.firebaseio.com",
+    projectId: "intermitentes-segurpro",
+    storageBucket: "intermitentes-segurpro.firebasestorage.app",
+    messagingSenderId: "1031012559431",
+    appId: "1:1031012559431:web:964ba73e8defd18f711f62"
 };
 
 // Initialize Firebase
