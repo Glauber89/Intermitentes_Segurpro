@@ -326,7 +326,7 @@ const App = {
                 <div class="mine-card-stats">
                     ${Object.entries(mine.statusCounts).map(([status, count]) => {
                         const cfg = STATUS_CONFIG[status];
-                        return cfg ? `<span class="mine-stat-tag">${cfg.icon} ${count} ${cfg.label}</span>` : '';
+                        return cfg ? `<span class="mine-stat-tag" onclick="App.filterAlocacaoByStatusAndMine('${status}', '${mine.nome}')" style="cursor:pointer;" title="Filtrar por ${cfg.label} em ${mine.nome}">${cfg.icon} ${count} ${cfg.label}</span>` : '';
                     }).join('')}
                     ${Object.keys(mine.statusCounts).length === 0 ? '<span class="mine-stat-tag">Nenhum alocado</span>' : ''}
                 </div>
@@ -452,6 +452,22 @@ const App = {
                 </div>
             `;
         }).join('');
+    },
+
+    filterAlocacaoByStatusAndMine(status, mina) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.bottom-nav-item').forEach(b => b.classList.remove('active'));
+
+        document.getElementById('page-alocacao').classList.add('active');
+        document.querySelectorAll(`[data-page="alocacao"]`).forEach(item => item.classList.add('active'));
+        
+        const statusFilter = document.getElementById('filter-alocacao-status');
+        const minaFilter = document.getElementById('filter-alocacao-mina');
+        if (statusFilter) statusFilter.value = status;
+        if (minaFilter) minaFilter.value = mina;
+        
+        this.renderAlocacao();
     },
 
     getFilteredAlocacao() {

@@ -571,6 +571,14 @@ body {
     border-radius: 6px;
     background: var(--bg-input);
     color: var(--text-secondary);
+    transition: all var(--transition-fast);
+}
+
+.mine-stat-tag.clickable:hover,
+.mine-stat-tag[style*="cursor:pointer"]:hover {
+    background: var(--bg-input-focus);
+    color: var(--text-primary);
+    transform: translateY(-1px);
 }
 
 /* ---- Activity List (Dashboard) ---- */
