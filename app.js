@@ -375,8 +375,9 @@ const App = {
                 <div class="colab-tags">
                     <span class="tag tag-tipo">${TIPOS_CONTRATO[c.tipoContrato] || c.tipoContrato}</span>
                     <span class="tag tag-funcao">${FUNCOES[c.funcao] || c.funcao}</span>
-                    <span class="tag tag-turno-${c.turnoPadrao}">${c.turnoPadrao === 'diurno' ? '☀️' : '🌙'} ${TURNOS[c.turnoPadrao] || c.turnoPadrao}</span>
-                    <span class="tag tag-mina">📍 ${this.escapeHtml(c.minaPadrao)}</span>
+                    <span class="tag tag-turno-${c.turnoPadrao}">${c.turnoPadrao === 'diurno' ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>' : '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>'} ${TURNOS[c.turnoPadrao] || c.turnoPadrao}</span>
+                    <span class="tag tag-mina"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> ${this.escapeHtml(c.minaPadrao)}</span>
+                    ${c.supervisor ? `<span class="tag tag-supervisor"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> ${this.escapeHtml(c.supervisor)}</span>` : ''}
                 </div>
                 <div class="colab-status-row">
                     ${this.renderStatusBadge(c.status)}
@@ -423,8 +424,9 @@ const App = {
                     </div>
                     <div class="alocacao-info">
                         <span class="tag tag-funcao">${FUNCOES[c.funcao] || c.funcao}</span>
-                        <span class="tag tag-turno-${c.turnoPadrao}">${c.turnoPadrao === 'diurno' ? '☀️' : '🌙'} ${TURNOS[c.turnoPadrao] || ''}</span>
+                        <span class="tag tag-turno-${c.turnoPadrao}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg> ${TURNOS[c.turnoPadrao] || ''}</span>
                         <span class="tag tag-mina">📍 ${this.escapeHtml(c.statusInfo?.mina || c.minaPadrao)}</span>
+                        ${c.supervisor ? `<span class="tag tag-supervisor">👤 Sup: ${this.escapeHtml(c.supervisor)}</span>` : ''}
                     </div>
                     ${this.renderStatusDetail(c) ? `<div class="alocacao-detail">${this.renderStatusDetail(c)}</div>` : ''}
                 </div>
@@ -522,8 +524,13 @@ const App = {
             if (info.turno) parts.push(`${info.turno === 'diurno' ? '☀️' : '🌙'} ${TURNOS[info.turno] || info.turno}`);
         }
 
-        if (colab.status === 'cobertura' && info.substituindo) {
-            parts.push(`↔️ Substituindo: ${info.substituindo}`);
+        if (colab.status === 'cobertura' && info) {
+            let details = [];
+            if (info.mina) details.push(`em <strong>${this.escapeHtml(info.mina)}</strong>`);
+            if (info.turno) details.push(`(${TURNOS[info.turno] || info.turno})`);
+            if (info.substituindo) details.push(`cobrindo <strong>${this.escapeHtml(info.substituindo)}</strong>`);
+            if (info.motivo) details.push(`- Motivo: ${this.escapeHtml(info.motivo)}`);
+            return `<span class="status-detail">${details.join(' ')}</span>`;
         }
 
         if (colab.status === 'ferias') {
@@ -563,6 +570,7 @@ const App = {
             document.getElementById('colab-funcao').value = colab.funcao || '';
             document.getElementById('colab-turno').value = colab.turnoPadrao || '';
             document.getElementById('colab-mina').value = colab.minaPadrao || '';
+            document.getElementById('colab-supervisor').value = colab.supervisor || '';
         } else {
             title.textContent = 'Novo Colaborador';
         }
@@ -579,7 +587,8 @@ const App = {
             tipoContrato: document.getElementById('colab-tipo').value,
             funcao: document.getElementById('colab-funcao').value,
             turnoPadrao: document.getElementById('colab-turno').value,
-            minaPadrao: document.getElementById('colab-mina').value
+            minaPadrao: document.getElementById('colab-mina').value,
+            supervisor: document.getElementById('colab-supervisor').value
         };
 
         if (!data.nome) {
@@ -640,7 +649,10 @@ const App = {
                 document.getElementById('status-cob-turno').value = colab.statusInfo.turno;
             }
             if (colab.statusInfo.substituindo) {
-                document.getElementById('status-cob-substituindo').value = colab.statusInfo.substituindo;
+                document.getElementById('status-cobrindo').value = colab.statusInfo.substituindo;
+            }
+            if (colab.statusInfo.motivo) {
+                document.getElementById('status-motivo').value = colab.statusInfo.motivo;
             }
             if (colab.statusInfo.inicio) {
                 document.getElementById('status-ferias-inicio').value = colab.statusInfo.inicio;
@@ -686,7 +698,8 @@ const App = {
         } else if (status === 'cobertura') {
             statusInfo.mina = document.getElementById('status-cob-mina').value;
             statusInfo.turno = document.getElementById('status-cob-turno').value;
-            statusInfo.substituindo = document.getElementById('status-cob-substituindo').value.trim();
+            statusInfo.substituindo = document.getElementById('status-cobrindo').value.trim();
+            statusInfo.motivo = document.getElementById('status-motivo').value;
         } else if (status === 'ferias') {
             statusInfo.inicio = document.getElementById('status-ferias-inicio').value;
             statusInfo.fim = document.getElementById('status-ferias-fim').value;
