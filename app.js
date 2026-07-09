@@ -303,7 +303,7 @@ const App = {
         grid.innerHTML = mineData.map(mine => `
             <div class="mine-card">
                 <div class="mine-card-header">
-                    <span class="mine-card-name">⛏️ ${mine.nome}</span>
+                    <span class="mine-card-name">🛡️ ${mine.nome}</span>
                     <span class="mine-card-total">${mine.total} colaboradores</span>
                 </div>
                 <div class="mine-card-stats">
