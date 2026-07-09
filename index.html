@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sistema de gestão e controle de colaboradores de segurança em mineração">
+    <title>MineGuard - Controle de Colaboradores</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- ========== SIDEBAR (Desktop) ========== -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-icon">⛏️</div>
+            <h2>MineGuard</h2>
+            <p class="brand-subtitle">Controle de Equipe</p>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active" data-page="dashboard">
+                <span class="nav-icon">📊</span>
+                <span class="nav-label">Dashboard</span>
+            </a>
+            <a href="#" class="nav-item" data-page="colaboradores">
+                <span class="nav-icon">👥</span>
+                <span class="nav-label">Colaboradores</span>
+            </a>
+            <a href="#" class="nav-item" data-page="alocacao">
+                <span class="nav-icon">📍</span>
+                <span class="nav-label">Alocação</span>
+            </a>
+            <a href="#" class="nav-item" data-page="coberturas">
+                <span class="nav-icon">🔄</span>
+                <span class="nav-label">Coberturas</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="connection-info">
+                <span class="status-dot online"></span>
+                <span class="status-label">Conectado</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ========== OVERLAY (Mobile sidebar) ========== -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <!-- ========== MAIN CONTENT ========== -->
+    <main class="main-content">
+
+        <!-- Top Header -->
+        <header class="top-header">
+            <div class="header-left">
+                <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menu">
+                    <span></span><span></span><span></span>
+                </button>
+                <h1 id="page-title">Dashboard</h1>
+            </div>
+            <div class="header-right">
+                <div class="connection-badge online" id="connection-badge">
+                    <span class="badge-dot"></span> Online
+                </div>
+            </div>
+        </header>
+
+        <!-- ===== PAGE: DASHBOARD ===== -->
+        <section id="page-dashboard" class="page active">
+
+            <!-- Status Summary Cards -->
+            <div class="stats-grid">
+                <div class="stat-card stat-trabalhando">
+                    <div class="stat-icon-wrap"><span>✅</span></div>
+                    <div class="stat-info">
+                        <span class="stat-number" id="stat-trabalhando">0</span>
+                        <span class="stat-label">Trabalhando</span>
+                    </div>
+                </div>
+                <div class="stat-card stat-cobertura">
+                    <div class="stat-icon-wrap"><span>🔄</span></div>
+                    <div class="stat-info">
+                        <span class="stat-number" id="stat-cobertura">0</span>
+                        <span class="stat-label">Cobertura</span>
+                    </div>
+                </div>
+                <div class="stat-card stat-aguardando">
+                    <div class="stat-icon-wrap"><span>⏳</span></div>
+                    <div class="stat-info">
+                        <span class="stat-number" id="stat-aguardando">0</span>
+                        <span class="stat-label">Aguardando</span>
+                    </div>
+                </div>
+                <div class="stat-card stat-ferias">
+                    <div class="stat-icon-wrap"><span>🏖️</span></div>
+                    <div class="stat-info">
+                        <span class="stat-number" id="stat-ferias">0</span>
+                        <span class="stat-label">Férias</span>
+                    </div>
+                </div>
+                <div class="stat-card stat-afastado">
+                    <div class="stat-icon-wrap"><span>🚫</span></div>
+                    <div class="stat-info">
+                        <span class="stat-number" id="stat-afastado">0</span>
+                        <span class="stat-label">Afastado</span>
+                    </div>
+                </div>
+                <div class="stat-card stat-folga">
+                    <div class="stat-icon-wrap"><span>💤</span></div>
+                    <div class="stat-info">
+                        <span class="stat-number" id="stat-folga">0</span>
+                        <span class="stat-label">Folga</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mines Overview -->
+            <h2 class="section-title">Visão por Mina</h2>
+            <div class="mines-grid" id="mines-grid">
+                <!-- Populated by JS -->
+            </div>
+
+            <!-- Recent Activity -->
+            <h2 class="section-title">Atividade Recente</h2>
+            <div class="activity-list glass-card" id="activity-list">
+                <p class="empty-state">Nenhuma atividade registrada</p>
+            </div>
+        </section>
+
+        <!-- ===== PAGE: COLABORADORES ===== -->
+        <section id="page-colaboradores" class="page">
+            <div class="page-toolbar">
+                <div class="search-wrapper">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="search-colaboradores" class="search-input" placeholder="Buscar por nome ou matrícula...">
+                </div>
+                <div class="toolbar-filters">
+                    <select id="filter-tipo" class="filter-select">
+                        <option value="">Todos os tipos</option>
+                        <option value="ferista">Ferista</option>
+                        <option value="mensalista">Mensalista</option>
+                        <option value="intermitente">Intermitente</option>
+                    </select>
+                    <select id="filter-funcao" class="filter-select">
+                        <option value="">Todas as funções</option>
+                        <option value="porteiro">Porteiro</option>
+                        <option value="vigilante_movel">Vigilante Móvel</option>
+                        <option value="vigilante_fixo">Vigilante Fixo</option>
+                    </select>
+                    <select id="filter-mina" class="filter-select">
+                        <option value="">Todas as minas</option>
+                        <option value="Cauê">Cauê</option>
+                        <option value="Conceição">Conceição</option>
+                        <option value="Periquito">Periquito</option>
+                        <option value="Projetos Capital">Projetos Capital</option>
+                        <option value="BD">BD</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" id="btn-add-colaborador">
+                    <span>+</span> Novo Colaborador
+                </button>
+            </div>
+
+            <div class="colaboradores-count" id="colaboradores-count"></div>
+
+            <div class="colaboradores-grid" id="colaboradores-list">
+                <p class="empty-state">Nenhum colaborador cadastrado</p>
+            </div>
+        </section>
+
+        <!-- ===== PAGE: ALOCAÇÃO ===== -->
+        <section id="page-alocacao" class="page">
+            <div class="page-toolbar">
+                <div class="search-wrapper">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="search-alocacao" class="search-input" placeholder="Buscar colaborador...">
+                </div>
+                <div class="toolbar-filters">
+                    <select id="filter-alocacao-status" class="filter-select">
+                        <option value="">Todos os status</option>
+                        <option value="trabalhando">Trabalhando</option>
+                        <option value="cobertura">Cobertura</option>
+                        <option value="aguardando_convocacao">Aguardando Convocação</option>
+                        <option value="ferias">Férias</option>
+                        <option value="afastado">Afastado</option>
+                        <option value="folga">Folga</option>
+                    </select>
+                    <select id="filter-alocacao-turno" class="filter-select">
+                        <option value="">Todos os turnos</option>
+                        <option value="diurno">Diurno</option>
+                        <option value="noturno">Noturno</option>
+                    </select>
+                    <select id="filter-alocacao-mina" class="filter-select">
+                        <option value="">Todas as minas</option>
+                        <option value="Cauê">Cauê</option>
+                        <option value="Conceição">Conceição</option>
+                        <option value="Periquito">Periquito</option>
+                        <option value="Projetos Capital">Projetos Capital</option>
+                        <option value="BD">BD</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="alocacao-grid" id="alocacao-list">
+                <p class="empty-state">Nenhum colaborador para exibir</p>
+            </div>
+        </section>
+
+        <!-- ===== PAGE: COBERTURAS ===== -->
+        <section id="page-coberturas" class="page">
+            <div class="page-toolbar">
+                <div class="toolbar-filters">
+                    <select id="filter-cobertura-status" class="filter-select">
+                        <option value="">Todas</option>
+                        <option value="ativa">Ativas</option>
+                        <option value="finalizada">Finalizadas</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" id="btn-add-cobertura">
+                    <span>+</span> Nova Cobertura
+                </button>
+            </div>
+
+            <div class="coberturas-grid" id="coberturas-list">
+                <p class="empty-state">Nenhuma cobertura registrada</p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ========== BOTTOM NAV (Mobile) ========== -->
+    <nav class="bottom-nav" id="bottom-nav">
+        <a href="#" class="bottom-nav-item active" data-page="dashboard">
+            <span class="bottom-nav-icon">📊</span>
+            <span class="bottom-nav-label">Dashboard</span>
+        </a>
+        <a href="#" class="bottom-nav-item" data-page="colaboradores">
+            <span class="bottom-nav-icon">👥</span>
+            <span class="bottom-nav-label">Equipe</span>
+        </a>
+        <a href="#" class="bottom-nav-item" data-page="alocacao">
+            <span class="bottom-nav-icon">📍</span>
+            <span class="bottom-nav-label">Alocação</span>
+        </a>
+        <a href="#" class="bottom-nav-item" data-page="coberturas">
+            <span class="bottom-nav-icon">🔄</span>
+            <span class="bottom-nav-label">Coberturas</span>
+        </a>
+    </nav>
+
+    <!-- ========== MODAL: Colaborador (Add/Edit) ========== -->
+    <div class="modal-overlay" id="modal-colaborador">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="modal-colaborador-title">Novo Colaborador</h2>
+                <button class="modal-close" data-close="modal-colaborador">&times;</button>
+            </div>
+            <form id="form-colaborador" class="modal-body">
+                <input type="hidden" id="colab-id">
+
+                <div class="form-group">
+                    <label for="colab-nome">Nome Completo *</label>
+                    <input type="text" id="colab-nome" required placeholder="Ex: João da Silva">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="colab-matricula">Matrícula</label>
+                        <input type="text" id="colab-matricula" placeholder="Ex: 12345">
+                    </div>
+                    <div class="form-group">
+                        <label for="colab-telefone">Telefone</label>
+                        <input type="tel" id="colab-telefone" placeholder="(31) 99999-9999">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="colab-tipo">Tipo de Contrato *</label>
+                        <select id="colab-tipo" required>
+                            <option value="">Selecione...</option>
+                            <option value="ferista">Ferista</option>
+                            <option value="mensalista">Mensalista</option>
+                            <option value="intermitente">Intermitente</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="colab-funcao">Função *</label>
+                        <select id="colab-funcao" required>
+                            <option value="">Selecione...</option>
+                            <option value="porteiro">Porteiro</option>
+                            <option value="vigilante_movel">Vigilante Móvel</option>
+                            <option value="vigilante_fixo">Vigilante Fixo</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="colab-turno">Turno Padrão *</label>
+                        <select id="colab-turno" required>
+                            <option value="">Selecione...</option>
+                            <option value="diurno">Diurno</option>
+                            <option value="noturno">Noturno</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="colab-mina">Mina Padrão *</label>
+                        <select id="colab-mina" required>
+                            <option value="">Selecione...</option>
+                            <option value="Cauê">Cauê</option>
+                            <option value="Conceição">Conceição</option>
+                            <option value="Periquito">Periquito</option>
+                            <option value="Projetos Capital">Projetos Capital</option>
+                            <option value="BD">BD</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" data-close="modal-colaborador">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========== MODAL: Atualizar Status ========== -->
+    <div class="modal-overlay" id="modal-status">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Atualizar Status</h2>
+                <button class="modal-close" data-close="modal-status">&times;</button>
+            </div>
+            <form id="form-status" class="modal-body">
+                <input type="hidden" id="status-colab-id">
+                <p class="modal-subtitle" id="status-colab-nome"></p>
+
+                <div class="form-group">
+                    <label for="status-select">Novo Status *</label>
+                    <select id="status-select" required>
+                        <option value="">Selecione...</option>
+                        <option value="trabalhando">✅ Trabalhando</option>
+                        <option value="cobertura">🔄 Cobertura</option>
+                        <option value="aguardando_convocacao">⏳ Aguardando Convocação</option>
+                        <option value="ferias">🏖️ Férias</option>
+                        <option value="afastado">🚫 Afastado</option>
+                        <option value="folga">💤 Folga</option>
+                    </select>
+                </div>
+
+                <!-- Campos dinâmicos: Trabalhando -->
+                <div id="status-fields-trabalhando" class="status-fields hidden">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="status-mina">Mina</label>
+                            <select id="status-mina">
+                                <option value="">Selecione...</option>
+                                <option value="Cauê">Cauê</option>
+                                <option value="Conceição">Conceição</option>
+                                <option value="Periquito">Periquito</option>
+                                <option value="Projetos Capital">Projetos Capital</option>
+                                <option value="BD">BD</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="status-turno">Turno</label>
+                            <select id="status-turno">
+                                <option value="">Selecione...</option>
+                                <option value="diurno">Diurno</option>
+                                <option value="noturno">Noturno</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Campos dinâmicos: Cobertura -->
+                <div id="status-fields-cobertura" class="status-fields hidden">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="status-cob-mina">Mina da Cobertura</label>
+                            <select id="status-cob-mina">
+                                <option value="">Selecione...</option>
+                                <option value="Cauê">Cauê</option>
+                                <option value="Conceição">Conceição</option>
+                                <option value="Periquito">Periquito</option>
+                                <option value="Projetos Capital">Projetos Capital</option>
+                                <option value="BD">BD</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="status-cob-turno">Turno</label>
+                            <select id="status-cob-turno">
+                                <option value="">Selecione...</option>
+                                <option value="diurno">Diurno</option>
+                                <option value="noturno">Noturno</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="status-cob-substituindo">Substituindo (quem)</label>
+                        <input type="text" id="status-cob-substituindo" placeholder="Nome do colaborador substituído">
+                    </div>
+                </div>
+
+                <!-- Campos dinâmicos: Férias -->
+                <div id="status-fields-ferias" class="status-fields hidden">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="status-ferias-inicio">Início</label>
+                            <input type="date" id="status-ferias-inicio">
+                        </div>
+                        <div class="form-group">
+                            <label for="status-ferias-fim">Fim</label>
+                            <input type="date" id="status-ferias-fim">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="status-obs">Observação</label>
+                    <textarea id="status-obs" rows="2" placeholder="Observação adicional (opcional)"></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" data-close="modal-status">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Atualizar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========== MODAL: Nova Cobertura ========== -->
+    <div class="modal-overlay" id="modal-cobertura">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Nova Cobertura</h2>
+                <button class="modal-close" data-close="modal-cobertura">&times;</button>
+            </div>
+            <form id="form-cobertura" class="modal-body">
+                <div class="form-group">
+                    <label for="cob-colaborador">Colaborador que vai cobrir *</label>
+                    <select id="cob-colaborador" required>
+                        <option value="">Selecione...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="cob-substituindo">Substituindo (quem) *</label>
+                    <select id="cob-substituindo" required>
+                        <option value="">Selecione...</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="cob-mina">Mina *</label>
+                        <select id="cob-mina" required>
+                            <option value="">Selecione...</option>
+                            <option value="Cauê">Cauê</option>
+                            <option value="Conceição">Conceição</option>
+                            <option value="Periquito">Periquito</option>
+                            <option value="Projetos Capital">Projetos Capital</option>
+                            <option value="BD">BD</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="cob-turno">Turno *</label>
+                        <select id="cob-turno" required>
+                            <option value="">Selecione...</option>
+                            <option value="diurno">Diurno</option>
+                            <option value="noturno">Noturno</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="cob-motivo">Motivo</label>
+                    <textarea id="cob-motivo" rows="2" placeholder="Motivo da cobertura (opcional)"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" data-close="modal-cobertura">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Registrar Cobertura</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========== MODAL: Confirmar Exclusão ========== -->
+    <div class="modal-overlay" id="modal-confirm">
+        <div class="modal modal-sm">
+            <div class="modal-header">
+                <h2>Confirmar Exclusão</h2>
+                <button class="modal-close" data-close="modal-confirm">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="confirm-message">Tem certeza que deseja excluir este item?</p>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" data-close="modal-confirm">Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="btn-confirm-delete">Excluir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== TOAST CONTAINER ========== -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- ========== SCRIPTS ========== -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    <script src="database.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
