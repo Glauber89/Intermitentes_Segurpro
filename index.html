@@ -341,9 +341,12 @@
                     </div>
                 </div>
 
-                <div class="form-actions">
-                    <button type="button" class="btn btn-secondary" data-close="modal-colaborador">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Salvar</button>
+                <div class="form-actions" style="justify-content: space-between;">
+                    <button type="button" class="btn btn-danger hidden" id="btn-delete-colab">Excluir</button>
+                    <div style="display: flex; gap: 10px;">
+                        <button type="button" class="btn btn-secondary" data-close="modal-colaborador">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+                    </div>
                 </div>
             </form>
         </div>
@@ -545,6 +548,10 @@
             </div>
             <div class="modal-body">
                 <p id="confirm-message">Tem certeza que deseja excluir este item?</p>
+                <div class="form-group" style="margin-top: 16px;">
+                    <label for="confirm-password">Senha de Segurança</label>
+                    <input type="password" id="confirm-password" placeholder="Digite a senha para confirmar">
+                </div>
                 <div class="form-actions">
                     <button type="button" class="btn btn-secondary" data-close="modal-confirm">Cancelar</button>
                     <button type="button" class="btn btn-danger" id="btn-confirm-delete">Excluir</button>

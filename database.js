@@ -127,6 +127,10 @@ const Database = {
         });
     },
 
+    deleteActivity(id) {
+        return db.ref(`atividades/${id}`).remove();
+    },
+
     onActivitiesChanged(callback, limit = 30) {
         db.ref('atividades')
             .orderByChild('timestamp')

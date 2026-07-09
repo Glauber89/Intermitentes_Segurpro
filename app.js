@@ -152,12 +152,29 @@ const App = {
 
         // Confirm delete button
         document.getElementById('btn-confirm-delete').addEventListener('click', () => {
+            const pwd = document.getElementById('confirm-password').value;
+            if (pwd !== 'admin123') {
+                this.showToast('Senha incorreta!', 'error');
+                return;
+            }
+
             if (this.deleteCallback) {
                 this.deleteCallback();
                 this.deleteCallback = null;
             }
             this.closeModal('modal-confirm');
         });
+
+        // Delete Colaborador button (in form)
+        const btnDeleteColab = document.getElementById('btn-delete-colab');
+        if (btnDeleteColab) {
+            btnDeleteColab.addEventListener('click', () => {
+                const id = document.getElementById('colab-id').value;
+                if (id) {
+                    this.promptDeleteColaborador(id);
+                }
+            });
+        }
     },
 
     openModal(id) {
@@ -333,10 +350,13 @@ const App = {
             return `
                 <div class="activity-item">
                     <div class="activity-icon">${icon}</div>
-                    <div class="activity-content">
+                    <div class="activity-content" style="flex:1;">
                         <div class="activity-text">${this.escapeHtml(act.details)}</div>
                         <div class="activity-time">${time}</div>
                     </div>
+                    <button class="btn-icon" onclick="App.promptDeleteActivity('${act.id}')" title="Excluir" style="color:var(--text-muted); opacity: 0.5; transition: 0.2s;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                    </button>
                 </div>
             `;
         }).join('');
@@ -554,7 +574,8 @@ const App = {
     openColaboradorModal(id = null) {
         const form = document.getElementById('form-colaborador');
         const title = document.getElementById('modal-colaborador-title');
-
+        const btnDelete = document.getElementById('btn-delete-colab');
+        
         form.reset();
         document.getElementById('colab-id').value = '';
 
@@ -563,6 +584,7 @@ const App = {
             if (!colab) return;
 
             title.textContent = 'Editar Colaborador';
+            if (btnDelete) btnDelete.classList.remove('hidden');
             document.getElementById('colab-id').value = id;
             document.getElementById('colab-nome').value = colab.nome || '';
             document.getElementById('colab-matricula').value = colab.matricula || '';
@@ -574,6 +596,7 @@ const App = {
             document.getElementById('colab-supervisor').value = colab.supervisor || '';
         } else {
             title.textContent = 'Novo Colaborador';
+            if (btnDelete) btnDelete.classList.add('hidden');
         }
 
         this.openModal('modal-colaborador');
@@ -618,13 +641,32 @@ const App = {
         this.openColaboradorModal(id);
     },
 
-    confirmDeleteColaborador(id, nome) {
-        document.getElementById('confirm-message').textContent =
-            `Tem certeza que deseja excluir "${nome}"? Esta ação não pode ser desfeita.`;
+    promptDeleteColaborador(id) {
+        const colab = this.colaboradores.find(c => c.id === id);
+        if (!colab) return;
+
+        document.getElementById('confirm-message').textContent = `Tem certeza que deseja excluir o colaborador(a) ${colab.nome}?`;
+        document.getElementById('confirm-password').value = '';
+        
         this.deleteCallback = () => {
-            Database.deleteColaborador(id, nome)
-                .then(() => this.showToast('Colaborador excluído', 'success'))
+            Database.deleteColaborador(id, colab.nome)
+                .then(() => {
+                    this.showToast('Colaborador excluído com sucesso!', 'success');
+                    this.closeModal('modal-colaborador');
+                })
                 .catch(err => this.showToast('Erro ao excluir: ' + err.message, 'error'));
+        };
+        this.openModal('modal-confirm');
+    },
+
+    promptDeleteActivity(id) {
+        document.getElementById('confirm-message').textContent = 'Tem certeza que deseja apagar este registro de atividade?';
+        document.getElementById('confirm-password').value = '';
+        
+        this.deleteCallback = () => {
+            Database.deleteActivity(id)
+                .then(() => this.showToast('Atividade apagada!', 'success'))
+                .catch(err => this.showToast('Erro ao apagar: ' + err.message, 'error'));
         };
         this.openModal('modal-confirm');
     },
