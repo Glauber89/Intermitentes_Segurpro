@@ -529,6 +529,7 @@ const App = {
             if (info.mina) details.push(`em <strong>${this.escapeHtml(info.mina)}</strong>`);
             if (info.turno) details.push(`(${TURNOS[info.turno] || info.turno})`);
             if (info.substituindo) details.push(`cobrindo <strong>${this.escapeHtml(info.substituindo)}</strong>`);
+            if (info.supervisor) details.push(`- Sup: <strong>${this.escapeHtml(info.supervisor)}</strong>`);
             if (info.motivo) details.push(`- Motivo: ${this.escapeHtml(info.motivo)}`);
             return `<span class="status-detail">${details.join(' ')}</span>`;
         }
@@ -654,6 +655,9 @@ const App = {
             if (colab.statusInfo.motivo) {
                 document.getElementById('status-motivo').value = colab.statusInfo.motivo;
             }
+            if (colab.statusInfo.supervisor) {
+                document.getElementById('status-cob-supervisor').value = colab.statusInfo.supervisor;
+            }
             if (colab.statusInfo.inicio) {
                 document.getElementById('status-ferias-inicio').value = colab.statusInfo.inicio;
             }
@@ -699,6 +703,7 @@ const App = {
             statusInfo.mina = document.getElementById('status-cob-mina').value;
             statusInfo.turno = document.getElementById('status-cob-turno').value;
             statusInfo.substituindo = document.getElementById('status-cobrindo').value.trim();
+            statusInfo.supervisor = document.getElementById('status-cob-supervisor').value;
             statusInfo.motivo = document.getElementById('status-motivo').value;
         } else if (status === 'ferias') {
             statusInfo.inicio = document.getElementById('status-ferias-inicio').value;
