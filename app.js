@@ -3,7 +3,7 @@
 // ============================================
 
 // ---- Constants ----
-const MINAS = ['Cauê', 'Conceição', 'Periquito', 'Projetos Capital', 'BD'];
+const MINAS = ['Cauê', 'Conceição', 'Periquito', 'Projetos Capital', 'DB'];
 
 const TIPOS_CONTRATO = {
     ferista: 'Ferista',
