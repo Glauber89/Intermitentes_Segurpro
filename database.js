@@ -3,7 +3,7 @@
 // ============================================
 
 // Detecta se está rodando localmente ou no Netlify
-const API_BASE = 'https://intermitentes-segurpro-default-rtdb.firebaseio.com';
+const API_BASE = 'https://abastecimento-sudeste.netlify.app/api/db';
 
 const Database = {
     colaboradoresListeners: [],
