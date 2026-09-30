@@ -3,13 +3,7 @@
 // ============================================
 
 // Detecta se está rodando localmente ou no Netlify
-const isLocal = window.location.hostname === 'localhost' || 
-                window.location.protocol === 'file:' || 
-                window.location.hostname === '127.0.0.1';
-
-const API_BASE = isLocal 
-    ? 'https://intermitentes-segurpro-default-rtdb.firebaseio.com' 
-    : '/api/db';
+const API_BASE = 'https://intermitentes-segurpro-default-rtdb.firebaseio.com';
 
 const Database = {
     colaboradoresListeners: [],
