@@ -54,7 +54,7 @@ const App = {
         this.setupForms();
         this.setupFilters();
         this.setupFirebaseListeners();
-        initConnectionMonitor();
+        Database.startPolling();
     },
 
     // ---- Navigation ----
