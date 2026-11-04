@@ -2,8 +2,8 @@
 // DATABASE.JS - Custom REST API with Netlify Proxy
 // ============================================
 
-// Detecta se está rodando localmente ou no Netlify
-const API_BASE = 'https://abastecimento-sudeste.netlify.app/api/db';
+// Firebase REST API — funciona via 4G/5G no celular (sem bloqueio de firewall corporativo)
+const API_BASE = 'https://intermitentes-segurpro-default-rtdb.firebaseio.com';
 
 const Database = {
     colaboradoresListeners: [],

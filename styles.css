@@ -1489,6 +1489,157 @@ body {
     }
 }
 
+/* ============================================
+   MOBILE FIRST — Melhorias para uso exclusivo mobile
+   ============================================ */
+
+/* Torna o modal mais amigável para toque */
+@media (max-width: 768px) {
+
+    /* Header menor e mais compacto */
+    .top-header {
+        height: 56px;
+    }
+
+    /* Stat cards em linha 3x2 para caber mais info */
+    .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+    }
+
+    .stat-card {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 12px 8px;
+        gap: 6px;
+    }
+
+    .stat-icon-wrap {
+        width: 32px;
+        height: 32px;
+    }
+
+    .stat-number {
+        font-size: 1.5rem;
+    }
+
+    .stat-label {
+        font-size: 0.65rem;
+    }
+
+    /* Botões maiores para toque fácil */
+    .btn {
+        min-height: 44px;
+        font-size: 0.9rem;
+    }
+
+    /* Cards de colaborador mais compactos */
+    .colab-card {
+        padding: 14px;
+    }
+
+    .colab-name {
+        font-size: 0.95rem;
+    }
+
+    /* Modal abre em tela cheia no mobile */
+    .modal-overlay {
+        align-items: flex-end;
+    }
+
+    .modal {
+        margin: 0;
+        border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+        max-height: 92vh;
+        width: 100%;
+    }
+
+    /* Formulários com inputs maiores para toque */
+    input[type="text"],
+    input[type="tel"],
+    input[type="date"],
+    input[type="password"],
+    select,
+    textarea {
+        font-size: 16px !important; /* Evita zoom automático no iOS */
+        min-height: 44px;
+        padding: 10px 14px;
+    }
+
+    textarea {
+        min-height: 80px;
+    }
+
+    /* Barra de busca maior */
+    .search-input {
+        min-height: 44px;
+        font-size: 16px !important;
+    }
+
+    /* Filtros em linha horizontal com scroll */
+    .toolbar-filters {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 4px;
+        scrollbar-width: none;
+    }
+
+    .toolbar-filters::-webkit-scrollbar {
+        display: none;
+    }
+
+    .filter-select {
+        flex-shrink: 0;
+        min-width: 120px;
+    }
+
+    /* Bottom nav com área de toque maior */
+    .bottom-nav {
+        height: 60px;
+        padding-bottom: env(safe-area-inset-bottom, 4px);
+    }
+
+    .bottom-nav-item {
+        padding: 10px 16px;
+        gap: 2px;
+    }
+
+    /* Notificação toast acima do bottom nav */
+    .toast-container {
+        bottom: calc(60px + env(safe-area-inset-bottom, 0px) + 10px);
+    }
+
+    /* Espaço extra no fundo da página para o bottom nav */
+    .main-content {
+        padding-bottom: calc(60px + env(safe-area-inset-bottom, 0px));
+    }
+}
+
+/* iPhone SE / telas muito pequenas */
+@media (max-width: 375px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .stat-number {
+        font-size: 1.3rem;
+    }
+
+    .bottom-nav-label {
+        display: none; /* Esconde labels, só fica ícone */
+    }
+
+    .bottom-nav-item {
+        padding: 12px 20px;
+    }
+
+    .bottom-nav {
+        height: 54px;
+    }
+}
+
 /* ---- Print ---- */
 @media print {
     .sidebar,
